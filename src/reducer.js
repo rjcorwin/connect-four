@@ -9,17 +9,37 @@ let cell = {
  highlighted: false
 }
 
-// Helper from https://medium.com/front-end-hacking/matrix-rotation-%EF%B8%8F-6550397f16ab
-const flipMatrix = matrix => (
-  matrix[0].map((column, index) => (
-    matrix.map(row => row[index])
-  ))
-);
+const reducer = (state, action) => {
+  let newState = Object.assign({}, state)
+  switch (action.type) {
+    case 'start' :
+      newState = { cells: [], turn: BLUE_TEAM, winner: null }
+      for (let column = 0; column < action.size; column++) {
+        for (let row = 0; row < action.size; row++) {
+          newState.cells.push(Object.assign({}, cell, {column, row}))
+        }
+      }
+      return newState
+      break;
+    case 'drop' :
+      const emptyCell = state.cells.find(cell => !cell.fill && cell.column == action.columnNumber)
+      const rowNumber = !emptyCell ? null : emptyCell.row
+      newState = Object.assign({}, state, {
+        turn: state.turn === BLUE_TEAM ? RED_TEAM : BLUE_TEAM,
+        cells: state.cells
+          .map(cell => Object.assign({}, cell, { fill: (cell.row === rowNumber && cell.column === action.columnNumber) ? state.turn : cell.fill }))
+      })
+      newState.winner = findWinner(newState.cells)
+      return newState
+      break;
+    default:
+      return state
+  }
+}
 
-// Helper from https://medium.com/front-end-hacking/matrix-rotation-%EF%B8%8F-6550397f16ab
-const rotateMatrixCounterClockwise = matrix => (
-  flipMatrix(matrix).reverse()
-);
+/*
+ * Helpers.
+ */
 
 function cellsToGrid(cells) {
   const numberOfRows = cells.reduce((numberOfRows, cell) => cell.row > numberOfRows ? cell.row : numberOfRows , 0) + 1
@@ -34,6 +54,19 @@ function cellsToGrid(cells) {
   }
   return gridMap
 }
+
+
+// Helper from https://medium.com/front-end-hacking/matrix-rotation-%EF%B8%8F-6550397f16ab
+const flipMatrix = matrix => (
+  matrix[0].map((column, index) => (
+    matrix.map(row => row[index])
+  ))
+);
+
+// Helper from https://medium.com/front-end-hacking/matrix-rotation-%EF%B8%8F-6550397f16ab
+const rotateMatrixCounterClockwise = matrix => (
+  flipMatrix(matrix).reverse()
+);
 
 function gridToSideways(grid) {
   return rotateMatrixCounterClockwise(grid)
@@ -93,34 +126,6 @@ function findWinner(cells) {
     return RED_TEAM
   } else {
     return null
-  }
-}
-
-const reducer = (state, action) => {
-  let newState = Object.assign({}, state)
-  switch (action.type) {
-    case 'start' :
-      newState = { cells: [], turn: BLUE_TEAM, winner: null }
-      for (let column = 0; column < action.size; column++) {
-        for (let row = 0; row < action.size; row++) {
-          newState.cells.push(Object.assign({}, cell, {column, row}))
-        }
-      }
-      return newState
-      break;
-    case 'drop' :
-      const emptyCell = state.cells.find(cell => !cell.fill && cell.column == action.columnNumber)
-      const rowNumber = !emptyCell ? null : emptyCell.row
-      newState = Object.assign({}, state, {
-        turn: state.turn === BLUE_TEAM ? RED_TEAM : BLUE_TEAM,
-        cells: state.cells
-          .map(cell => Object.assign({}, cell, { fill: (cell.row === rowNumber && cell.column === action.columnNumber) ? state.turn : cell.fill }))
-      })
-      newState.winner = findWinner(newState.cells)
-      return newState
-      break;
-    default:
-      return state
   }
 }
 
