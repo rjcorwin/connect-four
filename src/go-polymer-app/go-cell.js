@@ -12,7 +12,10 @@ class GoCell extends PolymerElement {
         :host {
           display: block;
           background: yellow;
-          width: 100%;
+          width: 40px;
+          height: 40px;
+          border-radius: 20px;
+          border-color: yellow;
           font-size: 3em;
         }
         :host([fill="RED_TEAM"]) {
@@ -22,7 +25,6 @@ class GoCell extends PolymerElement {
           background: blue;
         }
       </style>
-      0
     `;
   }
   static get properties() {
