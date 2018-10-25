@@ -12,7 +12,8 @@ class GoReset extends PolymerElement {
         :host {
           display: block;
           background: green;
-          width: 100%;
+          padding: 15px;
+          margin: 15px;
           font-size: 3em;
         }
       </style>

@@ -28,6 +28,7 @@
 
     <script type="module">
       import {reducer, BLUE_TEAM, RED_TEAM} from '../../src/reducer'
+      import { jerry } from '../../src/jerry'
 
       suite('go-polymer-reducer', function() {
 
@@ -131,7 +132,36 @@
           store.dispatch({type: 'drop', columnNumber: 0})
           assert.equal(store.getState().winner, BLUE_TEAM)
         })
+
       });
+
+      suite('jerry', function() {
+
+        test('should pick a move', function() {
+          const store = Redux.createStore(reducer)
+          store.dispatch({type: 'start', size: 8})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          assert.equal(Number.isInteger(jerry(store.getState())), true)
+        })
+
+        /*
+        test('should block a diamond right to left win', function() {
+          const store = Redux.createStore(reducer)
+          store.dispatch({type: 'start', size: 8})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          assert.equal(jerry(store.getState()), 3)
+        })
+        */
+
+      })
 
       suite('go-polymer-app', function() {
 
@@ -172,6 +202,13 @@
           element.shadowRoot.querySelector('go-reset').click()
           assert.equal(element.store.getState().winner, null)
         });
+
+        test('AI enables and takes turn', function() {
+          var element = fixture('BasicTestFixture');
+          element.shadowRoot.querySelector('go-cell[column="0"]').click()
+          element.shadowRoot.querySelector('play-jerry').click()
+          assert.equal(element.store.getState().turn, BLUE_TEAM)
+        })
 
       });
 
