@@ -33,19 +33,13 @@
 
         test('Starting a game with 3 columns 3 rows should have 9 cells.', function() {
           const store = Redux.createStore(reducer)
-          store.dispatch({type: 'start', columns: 3, rows: 3})
+          store.dispatch({type: 'start', size: 3})
           assert.equal(store.getState().cells.length, 9)
-        })
-
-        test('Starting a game with 8 columns 10 rows should have 80 cells.', function() {
-          const store = Redux.createStore(reducer)
-          store.dispatch({type: 'start', columns: 8, rows: 10})
-          assert.equal(store.getState().cells.length, 80)
         })
 
         test('Blue team should place first in correct column and row.', function() {
           const store = Redux.createStore(reducer)
-          store.dispatch({type: 'start', columns: 3, rows: 3})
+          store.dispatch({type: 'start', size: 3})
           assert.equal(store.getState().cells.length, 9)
           store.dispatch({type: 'drop', columnNumber: 2})
           assert.equal(!store.getState().cells.find(cell => cell.fill === BLUE_TEAM && cell.column === 2 && cell.row === 0), false)
@@ -53,7 +47,7 @@
 
         test('Red team should drop on top of blue team', function() {
           const store = Redux.createStore(reducer)
-          store.dispatch({type: 'start', columns: 3, rows: 3})
+          store.dispatch({type: 'start', size: 3})
           assert.equal(store.getState().cells.length, 9)
           store.dispatch({type: 'drop', columnNumber: 2})
           assert.equal(!store.getState().cells.find(cell => cell.fill === BLUE_TEAM && cell.column === 2 && cell.row === 0), false)
@@ -63,7 +57,7 @@
 
         test('Blue team should win across', function() {
           const store = Redux.createStore(reducer)
-          store.dispatch({type: 'start', columns: 12, rows: 8})
+          store.dispatch({type: 'start', size: 12})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 1})
@@ -77,7 +71,7 @@
 
         test('Blue team should win vertical', function() {
           const store = Redux.createStore(reducer)
-          store.dispatch({type: 'start', columns: 12, rows: 8})
+          store.dispatch({type: 'start', size: 12})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 1})
           store.dispatch({type: 'drop', columnNumber: 0})
@@ -90,7 +84,7 @@
 
         test('Red team should win across', function() {
           const store = Redux.createStore(reducer)
-          store.dispatch({type: 'start', columns: 4, rows: 4})
+          store.dispatch({type: 'start', size: 4})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 1})
@@ -104,14 +98,47 @@
           assert.equal(store.getState().winner, RED_TEAM)
         })
 
+        test('Blue team should wins diamond left to right', function() {
+          const store = Redux.createStore(reducer)
+          store.dispatch({type: 'start', size: 8})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          assert.equal(store.getState().winner, BLUE_TEAM)
+        })
+
+        test('Blue team should wins diamond right to left', function() {
+          const store = Redux.createStore(reducer)
+          store.dispatch({type: 'start', size: 8})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          assert.equal(store.getState().winner, BLUE_TEAM)
+        })
       });
 
       suite('go-polymer-app', function() {
 
-        test('instantiating the element starts with 18 columns and 8 rows', function() {
+        test('instantiating the element starts with 12 columns and 12 rows', function() {
           var element = fixture('BasicTestFixture');
-          assert.equal(element.shadowRoot.querySelectorAll('tr').length, 8)
-          assert.equal(element.shadowRoot.querySelector('tr').querySelectorAll('td').length, 18)
+          assert.equal(element.shadowRoot.querySelectorAll('tr').length, 12)
+          assert.equal(element.shadowRoot.querySelector('tr').querySelectorAll('td').length, 12)
         });
 
         test('clicking a column fills it a cell', function() {

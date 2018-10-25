@@ -33,9 +33,9 @@ class GoPolymerApp extends PolymerElement {
     super.connectedCallback()
     this.store = Redux.createStore(reducer)
     this.store.subscribe(() => this.render())
-    this.store.dispatch({type: 'start', columns: 18, rows: 8})
+    this.store.dispatch({type: 'start', size: 12})
     this.shadowRoot.addEventListener('go-reset-click', (event) => {
-      this.store.dispatch({type: 'start', columns: 12, rows: 8})
+      this.store.dispatch({type: 'start', size: 12})
     })
     this.shadowRoot.addEventListener('go-cell-click', (event) => {
       if (!this.store.getState().winner) {
