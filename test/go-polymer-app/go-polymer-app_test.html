@@ -187,10 +187,10 @@
 
       suite('go-polymer-app', function() {
 
-        test('instantiating the element starts with 12 columns and 12 rows', function() {
+        test('instantiating the element starts with 7 columns and 7 rows', function() {
           var element = fixture('BasicTestFixture');
-          assert.equal(element.shadowRoot.querySelectorAll('tr').length, 12)
-          assert.equal(element.shadowRoot.querySelector('tr').querySelectorAll('td').length, 12)
+          assert.equal(element.shadowRoot.querySelectorAll('tr').length, 7)
+          assert.equal(element.shadowRoot.querySelector('tr').querySelectorAll('td').length, 7)
         });
 
         test('clicking a column fills it a cell', function() {

@@ -1,4 +1,5 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {Switch} from '@material/mwc-switch'
 
 /**
  * @customElement
@@ -10,14 +11,9 @@ class StopJerry extends PolymerElement {
       <style>
         :host {
           display: block;
-          background: black;
-          color: white;
-          padding: 15px;
-          margin: 15px;
-          font-size: 3em;
         }
       </style>
-      _____ON AI
+      <mwc-switch checked></mwc-switch> AI
     `;
   }
   static get properties() {

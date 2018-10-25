@@ -1,4 +1,5 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {Switch} from '@material/mwc-switch'
 
 /**
  * @customElement
@@ -10,14 +11,10 @@ class PlayJerry extends PolymerElement {
       <style>
         :host {
           display: block;
-          background: black;
-          color: white;
-          padding: 15px;
-          margin: 15px;
-          font-size: 3em;
         }
       </style>
-      OFF____ AI
+      <mwc-switch></mwc-switch> Play against Jerry the Robot <br>
+      <img src="jerry-the-robot.png"/>
     `;
   }
   static get properties() {

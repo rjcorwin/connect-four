@@ -11,14 +11,9 @@ class GoReset extends PolymerElement {
       <style>
         :host {
           display: block;
-          background: black;
-          color: white;
-          padding: 15px;
-          margin: 15px;
-          font-size: 3em;
         }
       </style>
-      RESET
+      <mwc-button class="light" raised="" label="reset" icon="refresh"></mwc-button>
     `;
   }
   static get properties() {

@@ -20,7 +20,7 @@ class GoCell extends PolymerElement {
         }
         .inner-circle {
           display: block;
-          background: #CCC;
+          background: #EEE;
           opacity: .3;
           width: 36px;
           height: 36px;

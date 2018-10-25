@@ -5,6 +5,7 @@ import './go-reset'
 import './play-jerry'
 import './stop-jerry'
 import { jerry } from '../jerry.js'
+import {Button} from "@material/mwc-button"
 
 /**
  * @customElement
@@ -34,9 +35,9 @@ class GoPolymerApp extends PolymerElement {
     super.connectedCallback()
     this.store = Redux.createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
     this.store.subscribe(() => this.render())
-    this.store.dispatch({type: 'start', size: 12})
+    this.store.dispatch({type: 'start', size: 7})
     this.shadowRoot.addEventListener('go-reset-click', (event) => {
-      this.store.dispatch({type: 'start', size: 12})
+      this.store.dispatch({type: 'start', size: 7})
     })
     this.shadowRoot.addEventListener('go-cell-click', (event) => {
       if (!this.store.getState().winner) {
@@ -53,8 +54,9 @@ class GoPolymerApp extends PolymerElement {
     this.shadowRoot.innerHTML = `
       <style>
         :host {
-          display: span;
+          display: block;
           margin: 0 auto;
+          text-align: center;
         }
         :host([has-opponent]) play-jerry {
           display: none;
@@ -62,15 +64,40 @@ class GoPolymerApp extends PolymerElement {
         :host(:not([has-opponent])) stop-jerry {
           display:none;
         }
+        table {
+          background: yellow;
+          padding: 15px;
+          border-radius: 10px;
+          border-width: 5px;
+          border-color: darkkhaki;
+          border-style: solid;
+          margin: auto;
+          width: 50%;
+        }
         .winner {
           padding: 12px 0px;
           margin: 5px 15px;
         }
         .turn {
-          margin: 0px;
           padding: 15px;
+
+          text-align:center;
+          width: 100%;
+        }
+        go-reset {
+          margin: 15px;
         }
       </style>
+      ${(state.turn && !state.winner) ? `
+        <div class="turn" style="color: ${state.turn === BLUE_TEAM ? `blue` : `red` };">
+          Go ${state.turn === BLUE_TEAM ? `Blue Team` : `Red Team` }
+        </div>
+      ` : ``}
+      ${state.winner ? `
+        <div class="winner" style="font-weight: bolder; color: ${state.winner === BLUE_TEAM ? `blue` : `red` };">
+          ${state.winner === BLUE_TEAM ? `Blue Team` : `Red Team` } wins!
+        </div>
+      ` : ``}
       <table>
        ${grid.map((row, rowNumber) => `
          <tr>
@@ -82,20 +109,11 @@ class GoPolymerApp extends PolymerElement {
          </tr>
        `).join('')}
       </table>
-      ${(state.turn && !state.winner) ? `
-        <div class="turn" style="color: ${state.turn === BLUE_TEAM ? `blue` : `red` };">
-          Go ${state.turn === BLUE_TEAM ? `Blue Team` : `Red Team` }
-        </div>
-      ` : ``}
-      ${state.winner ? `
-        <div class="winner" style="font-weight: bolder; color: ${state.winner === BLUE_TEAM ? `blue` : `red` };">
-          ${state.winner === BLUE_TEAM ? `Blue Team` : `Red Team` } wins!
-        </div>
-      ` : ``}
       <go-reset></go-reset>
       <play-jerry></play-jerry>
       <stop-jerry></stop-jerry>
     `
+    // Queue opponent if we must.
     if (this.hasOpponent && state.turn === RED_TEAM && !state.winner) {
       if (this.opponentDelay > 0) {
         setTimeout(() => this.store.dispatch({type: 'drop', columnNumber: jerry(state)}), this.opponentDelay)

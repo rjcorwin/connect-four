@@ -1,6 +1,8 @@
 {
   "name": "go-polymer",
   "dependencies": {
+    "@material/mwc-button": "^0.3.1",
+    "@material/mwc-switch": "^0.3.1",
     "@polymer/polymer": "^3.0.0",
     "polymer-cli": "^1.8.0"
   },
