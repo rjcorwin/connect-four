@@ -18,6 +18,16 @@ class GoCell extends PolymerElement {
           border-color: yellow;
           font-size: 3em;
         }
+        .inner-circle {
+          display: block;
+          background: #CCC;
+          opacity: .3;
+          width: 36px;
+          height: 36px;
+          border-radius: 20px;
+          border-color: yellow;
+          font-size: 3em;
+        }
         :host([fill="RED_TEAM"]) {
           background: red;
         }
@@ -25,6 +35,7 @@ class GoCell extends PolymerElement {
           background: blue;
         }
       </style>
+      <div class="inner-circle"></div>
     `;
   }
   static get properties() {
