@@ -144,7 +144,35 @@
           assert.equal(Number.isInteger(jerry(store.getState())), true)
         })
 
-        /*
+        test('should calculate the winning move across', function() {
+          const store = Redux.createStore(reducer)
+          store.dispatch({type: 'start', size: 4})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          assert.equal(jerry(store.getState()), 3)
+        })
+
+        test('should calculate to block the winning move across', function() {
+          const store = Redux.createStore(reducer)
+          store.dispatch({type: 'start', size: 4})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          assert.equal(jerry(store.getState()), 3)
+        })
+
         test('should block a diamond right to left win', function() {
           const store = Redux.createStore(reducer)
           store.dispatch({type: 'start', size: 8})
@@ -157,9 +185,9 @@
           store.dispatch({type: 'drop', columnNumber: 1})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 0})
-          assert.equal(jerry(store.getState()), 3)
+          // The correct move to block is columnNumber 0.
+          assert.equal(jerry(store.getState()), 0)
         })
-        */
 
       })
 
@@ -176,7 +204,6 @@
           element.shadowRoot.querySelector('go-cell').click()
           assert.equal(element.store.getState().cells.find(cell => cell.fill === 'BLUE_TEAM').column, 0)
         });
-
 
         test('Blue team wins', function() {
           var element = fixture('BasicTestFixture');

@@ -119,6 +119,8 @@ const reducer = (state, action) => {
       newState.winner = findWinner(newState.cells)
       return newState
       break;
+    default:
+      return state
   }
 }
 
