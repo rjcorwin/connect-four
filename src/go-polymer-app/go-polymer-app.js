@@ -83,7 +83,7 @@ class GoPolymerApp extends PolymerElement {
        `).join('')}
       </table>
       ${(state.turn && !state.winner) ? `
-        <div class="turn">
+        <div class="turn" style="color: ${state.turn === BLUE_TEAM ? `blue` : `red` };">
           Go ${state.turn === BLUE_TEAM ? `Blue Team` : `Red Team` }
         </div>
       ` : ``}

@@ -11,7 +11,7 @@ class GoCell extends PolymerElement {
       <style>
         :host {
           display: block;
-          background: yellow;
+          background: #BBB;
           width: 40px;
           height: 40px;
           border-radius: 20px;
