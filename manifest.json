@@ -1,0 +1,6 @@
+{
+  "name": "go-polymer",
+  "short_name": "go-polymer",
+  "start_url": "/",
+  "display": "standalone"
+}
