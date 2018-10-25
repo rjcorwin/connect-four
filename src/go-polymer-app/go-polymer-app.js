@@ -62,6 +62,14 @@ class GoPolymerApp extends PolymerElement {
         :host(:not([has-opponent])) stop-jerry {
           display:none;
         }
+        .winner {
+          padding: 12px 0px;
+          margin: 5px 15px;
+        }
+        .turn {
+          margin: 0px;
+          padding: 15px;
+        }
       </style>
       <table>
        ${grid.map((row, rowNumber) => `
@@ -76,12 +84,12 @@ class GoPolymerApp extends PolymerElement {
       </table>
       ${(state.turn && !state.winner) ? `
         <div class="turn">
-          GO ${state.turn}
+          Go ${state.turn === BLUE_TEAM ? `Blue Team` : `Red Team` }
         </div>
       ` : ``}
       ${state.winner ? `
-        <div class="winner">
-          ${state.winner} wins!
+        <div class="winner" style="font-weight: bolder; color: ${state.winner === BLUE_TEAM ? `blue` : `red` };">
+          ${state.winner === BLUE_TEAM ? `Blue Team` : `Red Team` } wins!
         </div>
       ` : ``}
       <go-reset></go-reset>

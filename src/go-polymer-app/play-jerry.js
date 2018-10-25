@@ -10,7 +10,7 @@ class PlayJerry extends PolymerElement {
       <style>
         :host {
           display: block;
-          background: green;
+          background: saddlebrown;
           padding: 15px;
           margin: 15px;
           font-size: 3em;
