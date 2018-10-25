@@ -62,10 +62,11 @@ function findWinner(cells) {
   }
 }
 
-const reducer = (state = { cells: [], turn: BLUE_TEAM, winner: null }, action) => {
+const reducer = (state, action) => {
   let newState = Object.assign({}, state)
   switch (action.type) {
     case 'start' :
+      newState = { cells: [], turn: BLUE_TEAM, winner: null }
       for (let column = 0; column < action.columns; column++) {
         for (let row = 0; row < action.rows; row++) {
           newState.cells.push(Object.assign({}, cell, {column, row}))
@@ -87,4 +88,4 @@ const reducer = (state = { cells: [], turn: BLUE_TEAM, winner: null }, action) =
   }
 }
 
-export { reducer, BLUE_TEAM, RED_TEAM }
+export { reducer, cellsToGrid, BLUE_TEAM, RED_TEAM }
