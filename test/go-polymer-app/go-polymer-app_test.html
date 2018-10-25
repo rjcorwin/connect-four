@@ -72,6 +72,35 @@
           assert.equal(!store.getState().cells.find(cell => cell.fill === RED_TEAM && cell.column === 2 && cell.row === 1), false)
         })
 
+        test('Blue team should win across', function() {
+          const store = Redux.createStore(reducer)
+          store.dispatch({type: 'start', columns: 12, rows: 8})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          assert.equal(store.getState().winner, BLUE_TEAM)
+        })
+
+        test('Red team should win across', function() {
+          const store = Redux.createStore(reducer)
+          store.dispatch({type: 'start', columns: 4, rows: 4})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          store.dispatch({type: 'drop', columnNumber: 2})
+          store.dispatch({type: 'drop', columnNumber: 3})
+          assert.equal(store.getState().winner, RED_TEAM)
+        })
+
       });
     </script>
 
