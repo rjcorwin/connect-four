@@ -29,29 +29,18 @@
     <script type="module">
       import {reducer, BLUE_TEAM, RED_TEAM} from '../../src/reducer'
 
-      suite('go-polymer-app', function() {
-
-        test('instantiating the element with default properties works', function() {
-          var element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'go-polymer-app');
-          var elementShadowRoot = element.shadowRoot;
-          var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello go-polymer-app!');
-        });
-
-        test('setting a property on the element works', function() {
-          // Create a test fixture
-          var element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          var elementShadowRoot = element.shadowRoot;
-          var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
-        });
+      suite('go-polymer-reducer', function() {
 
         test('Starting a game with 3 columns 3 rows should have 9 cells.', function() {
           const store = Redux.createStore(reducer)
           store.dispatch({type: 'start', columns: 3, rows: 3})
           assert.equal(store.getState().cells.length, 9)
+        })
+
+        test('Starting a game with 8 columns 10 rows should have 80 cells.', function() {
+          const store = Redux.createStore(reducer)
+          store.dispatch({type: 'start', columns: 8, rows: 10})
+          assert.equal(store.getState().cells.length, 80)
         })
 
         test('Blue team should place first in correct column and row.', function() {
@@ -102,6 +91,49 @@
         })
 
       });
+
+      suite('go-polymer-app', function() {
+
+        test('instantiating the element starts with 18 columns and 8 rows', function() {
+          var element = fixture('BasicTestFixture');
+          assert.equal(element.shadowRoot.querySelectorAll('tr').length, 8)
+          assert.equal(element.shadowRoot.querySelector('tr').querySelectorAll('td').length, 18)
+        });
+
+        test('clicking a column fills it a cell', function() {
+          var element = fixture('BasicTestFixture');
+          element.shadowRoot.querySelector('go-cell').click()
+          assert.equal(element.store.getState().cells.find(cell => cell.fill === 'BLUE_TEAM').column, 0)
+        });
+
+
+        test('Blue team wins', function() {
+          var element = fixture('BasicTestFixture');
+          element.shadowRoot.querySelector('go-cell[column="0"]').click()
+          element.shadowRoot.querySelector('go-cell[column="0"]').click()
+          element.shadowRoot.querySelector('go-cell[column="1"]').click()
+          element.shadowRoot.querySelector('go-cell[column="1"]').click()
+          element.shadowRoot.querySelector('go-cell[column="2"]').click()
+          element.shadowRoot.querySelector('go-cell[column="2"]').click()
+          element.shadowRoot.querySelector('go-cell[column="3"]').click()
+          assert.equal(element.store.getState().winner, 'BLUE_TEAM')
+        });
+
+        test('should reset', function() {
+          var element = fixture('BasicTestFixture');
+          element.shadowRoot.querySelector('go-cell[column="0"]').click()
+          element.shadowRoot.querySelector('go-cell[column="0"]').click()
+          element.shadowRoot.querySelector('go-cell[column="1"]').click()
+          element.shadowRoot.querySelector('go-cell[column="1"]').click()
+          element.shadowRoot.querySelector('go-cell[column="2"]').click()
+          element.shadowRoot.querySelector('go-cell[column="2"]').click()
+          element.shadowRoot.querySelector('go-cell[column="3"]').click()
+          element.shadowRoot.querySelector('go-reset').click()
+          assert.equal(element.store.getState().winner, null)
+        });
+
+      });
+
     </script>
 
 
