@@ -74,6 +74,20 @@
           assert.equal(store.getState().winner, BLUE_TEAM)
         })
 
+
+        test('Blue team should win vertical', function() {
+          const store = Redux.createStore(reducer)
+          store.dispatch({type: 'start', columns: 12, rows: 8})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          store.dispatch({type: 'drop', columnNumber: 1})
+          store.dispatch({type: 'drop', columnNumber: 0})
+          assert.equal(store.getState().winner, BLUE_TEAM)
+        })
+
         test('Red team should win across', function() {
           const store = Redux.createStore(reducer)
           store.dispatch({type: 'start', columns: 4, rows: 4})

@@ -9,6 +9,18 @@ let cell = {
  highlighted: false
 }
 
+// Helper from https://medium.com/front-end-hacking/matrix-rotation-%EF%B8%8F-6550397f16ab
+const flipMatrix = matrix => (
+  matrix[0].map((column, index) => (
+    matrix.map(row => row[index])
+  ))
+);
+
+// Helper from https://medium.com/front-end-hacking/matrix-rotation-%EF%B8%8F-6550397f16ab
+const rotateMatrixCounterClockwise = matrix => (
+  flipMatrix(matrix).reverse()
+);
+
 function cellsToGrid(cells) {
   const numberOfRows = cells.reduce((numberOfRows, cell) => cell.row > numberOfRows ? cell.row : numberOfRows , 0) + 1
   const numberOfColumns = cells.reduce((numberOfColumns, cell) => cell.column > numberOfColumns ? cell.column : numberOfColumns , 0) + 1
@@ -24,8 +36,7 @@ function cellsToGrid(cells) {
 }
 
 function gridToSideways(grid) {
-  // @TODO
-  return grid
+  return rotateMatrixCounterClockwise(grid)
 }
 
 function gridToDiamond(grid) {
