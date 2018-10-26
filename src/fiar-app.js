@@ -53,7 +53,7 @@ class FiarApp extends PolymerElement {
           border-color: darkkhaki;
           border-style: solid;
           margin: auto;
-          width: 50%;
+          width: 380px;
         }
         #winner {
           padding: 12px 0px;
