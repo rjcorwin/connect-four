@@ -1,6 +1,6 @@
 
-import { reducer, cellsToGrid } from './reducer'
-import { shuffleArray } from './helpers'
+import { reducer } from './reducer'
+import { shuffleArray, cellsToMatrix } from './helpers'
 import { createStore } from "redux/es/redux.mjs";
 
 const RED_TEAM = 'RED_TEAM'
@@ -13,13 +13,7 @@ function ai(state) {
   if (winningMoves.length > 0) {
     return shuffleArray(winningMoves)[0]
   } else {
-    // Generate a series of potential moves in random order.
-    let potentialMoves = []
-    let matrix = cellsToGrid(state.cells)
-    for(let i = 0; i < matrix[0].length; i++) {
-      // TODO: Protect against columns that are full.
-      potentialMoves.push(i)
-    }
+    let potentialMoves = state.validDrops
     // Find moves that do not result in the opponent having a winning move.
     let safeMoves = []
     for(let potentialMove of potentialMoves) {
@@ -41,7 +35,7 @@ function ai(state) {
 
 // Returns array of winning moves given state.
 function findWinningMoves(state) {
-  let matrix = cellsToGrid(state.cells)
+  let matrix = cellsToMatrix(state.cells)
   const winningMoves = []
   for (let i = 0; matrix[0].length > i; i++) {
     let store = createStore(reducer, state)

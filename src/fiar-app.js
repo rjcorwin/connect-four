@@ -1,5 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
-import { reducer, cellsToGrid, RED_TEAM, BLUE_TEAM } from './reducer'
+import { reducer, RED_TEAM, BLUE_TEAM } from './reducer'
+import { cellsToMatrix } from './helpers'
 import './fiar-cell'
 import { ai } from './ai'
 import {Button} from "@material/mwc-button"
@@ -37,7 +38,7 @@ class FiarApp extends PolymerElement {
 
   render() {
     const state = this.store.getState()
-    const grid = cellsToGrid(state.cells).reverse()
+    const grid = cellsToMatrix(state.cells).reverse()
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -99,7 +100,9 @@ class FiarApp extends PolymerElement {
     this.shadowRoot.querySelector('#game').addEventListener('fiar-cell-click', (event) => {
       if (!this.store.getState().winner && !this.aiTakingTurn) {
         this.store.dispatch({type: 'DROP', columnNumber: event.target.column})
-        if (this.aiEnabled && this.store.getState().turn === RED_TEAM) this.aiTurn()
+        if (!this.store.getState().winner && this.aiEnabled && this.store.getState().turn === RED_TEAM) {
+          this.aiTurn()
+        }
       }
     }, {once: true})
     this.shadowRoot.querySelector('#reset').addEventListener('click', (event) => {
@@ -115,7 +118,7 @@ class FiarApp extends PolymerElement {
       }
     }, {once: true})
   }
-
+  
   aiTurn() {
     if (this.aiDelay > 0) {
       this.aiTakingTurn = true

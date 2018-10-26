@@ -69,7 +69,6 @@
           assert.equal(store.getState().winner, BLUE_TEAM)
         })
 
-
         test('Blue team should win vertical', function() {
           const store = createStore(reducer)
           store.dispatch({type: 'START', size: 12})
@@ -133,6 +132,14 @@
           assert.equal(store.getState().winner, BLUE_TEAM)
         })
 
+        test('should calculate valid drops', function() {
+          const store = createStore(reducer)
+          store.dispatch({type: 'START', size: 2})
+          store.dispatch({type: 'DROP', columnNumber: 0})
+          store.dispatch({type: 'DROP', columnNumber: 0})
+          assert.equal(store.getState().validDrops.filter(columnNumber => columnNumber === 0).length, 0)
+        })
+
       });
 
       suite('ai', function() {
@@ -187,6 +194,18 @@
           store.dispatch({type: 'DROP', columnNumber: 0})
           // The correct move to block is columnNumber 0.
           assert.equal(ai(store.getState()), 0)
+        })
+
+        // Warning, this test in nondeterministic thus may produce false positives.
+        test('should calculate valid drops', function() {
+          const store = createStore(reducer)
+          // Repeat to reduce the chances of a false positive.
+          for (var i = 0; i < 100; i++) {
+            store.dispatch({type: 'START', size: 2})
+            store.dispatch({type: 'DROP', columnNumber: 0})
+            store.dispatch({type: 'DROP', columnNumber: 0})
+            assert.equal(ai(store.getState()), 1)
+          }
         })
 
       })

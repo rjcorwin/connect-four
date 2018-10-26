@@ -1,5 +1,4 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
-import { reducer, cellsToGrid, RED_TEAM, BLUE_TEAM } from './reducer'
 
 /**
  * @customElement
