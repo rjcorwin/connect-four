@@ -25,7 +25,7 @@ function ai(state) {
     let potentialMoves = []
     let matrix = cellsToGrid(state.cells)
     for(let i = 0; i < matrix[0].length; i++) {
-      // TODO: Make this random and protect against columns we can't enter.
+      // TODO: Protect against columns that are full.
       potentialMoves.push(i)
     }
     // Find moves that do not result in the opponent having a winning move.
@@ -57,11 +57,6 @@ function findWinningMoves(state) {
     if (store.getState().winner) winningMoves.push(i)
   }
   return winningMoves
-}
-
-function opponentWillHaveWinningMove() {
-  // TODO
-  return false
 }
 
 export { ai }
