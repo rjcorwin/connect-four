@@ -5,7 +5,7 @@ import './fiar-cell'
 import { ai } from './ai'
 import {Button} from "@material/mwc-button"
 import {Switch} from '@material/mwc-switch'
-import { createStore } from "redux/es/redux.mjs";
+import { createStore } from "redux/es/redux.js";
 
 /**
  * @customElement
@@ -118,7 +118,7 @@ class FiarApp extends PolymerElement {
       }
     }, {once: true})
   }
-  
+
   aiTurn() {
     if (this.aiDelay > 0) {
       this.aiTakingTurn = true

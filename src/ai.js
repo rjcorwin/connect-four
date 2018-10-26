@@ -1,7 +1,7 @@
 
 import { reducer } from './reducer'
 import { shuffleArray, cellsToMatrix } from './helpers'
-import { createStore } from "redux/es/redux.mjs";
+import { createStore } from "redux/es/redux.js";
 
 const RED_TEAM = 'RED_TEAM'
 const BLUE_TEAM = 'BLUE_TEAM'
