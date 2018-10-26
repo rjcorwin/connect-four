@@ -96,28 +96,35 @@ class FiarApp extends PolymerElement {
         <mwc-switch ${this.aiEnabled ? `checked` : ``}></mwc-switch> AI
       </div>
     `
-
-
     this.shadowRoot.querySelector('#game').addEventListener('fiar-cell-click', (event) => {
-      if (!this.store.getState().winner) {
+      if (!this.store.getState().winner && !this.aiTakingTurn) {
         this.store.dispatch({type: 'DROP', columnNumber: event.target.column})
+        if (this.aiEnabled && this.store.getState().turn === RED_TEAM) this.aiTurn()
       }
     }, {once: true})
     this.shadowRoot.querySelector('#reset').addEventListener('click', (event) => {
-      this.store.dispatch({type: 'START', size: 7})
+      if (!this.aiTakingTurn) {
+        this.store.dispatch({type: 'START', size: 7})
+      }
     }, {once: true})
     // Listen for turning ai on and off.
     this.shadowRoot.querySelector('#ai-switch').addEventListener('click', (event) => {
-      this.aiEnabled = !event.target.checked
-      this.render()
-    }, {once: true})
-    // Queue ai if we must.
-    if (this.aiEnabled && state.turn === RED_TEAM && !state.winner) {
-      if (this.aiDelay > 0) {
-        setTimeout(() => this.store.dispatch({type: 'DROP', columnNumber: ai(state)}), this.aiDelay)
-      } else {
-        this.store.dispatch({type: 'DROP', columnNumber: ai(state)})
+      if (!this.aiTakingTurn) {
+        this.aiEnabled = !event.target.checked
+        if (state.turn === RED_TEAM) this.aiTurn()
       }
+    }, {once: true})
+  }
+
+  aiTurn() {
+    if (this.aiDelay > 0) {
+      this.aiTakingTurn = true
+      setTimeout(() => {
+        this.store.dispatch({type: 'DROP', columnNumber: ai(this.store.getState())}), this.aiDelay
+        this.aiTakingTurn = false
+      }, this.aiDelay)
+    } else {
+      this.store.dispatch({type: 'DROP', columnNumber: ai(this.store.getState())})
     }
   }
 

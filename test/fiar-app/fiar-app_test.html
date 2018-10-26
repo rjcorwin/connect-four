@@ -19,6 +19,12 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="AiTestFixture">
+      <template>
+        <fiar-app ai-enabled></fiar-app>
+      </template>
+    </test-fixture>
+
     <script type="module">
       import {reducer, BLUE_TEAM, RED_TEAM} from '../../src/reducer'
       import { ai } from '../../src/ai'
@@ -228,6 +234,12 @@
           var element = fixture('BasicTestFixture');
           element.shadowRoot.querySelector('fiar-cell[column="0"]').click()
           element.shadowRoot.querySelector('#ai-switch').click()
+          assert.equal(element.store.getState().turn, BLUE_TEAM)
+        })
+
+        test('AI takes turn after us', function() {
+          var element = fixture('AiTestFixture');
+          element.shadowRoot.querySelector('fiar-cell[column="0"]').click()
           assert.equal(element.store.getState().turn, BLUE_TEAM)
         })
 
