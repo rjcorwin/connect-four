@@ -8,7 +8,6 @@
 
     <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../../node_modules/wct-browser-legacy/browser.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.min.js"></script>
 
     <script type="module" src="../../src/fiar-app.js"></script>
   </head>
@@ -23,17 +22,18 @@
     <script type="module">
       import {reducer, BLUE_TEAM, RED_TEAM} from '../../src/reducer'
       import { ai } from '../../src/ai'
+      import { createStore } from "redux/es/redux.mjs";
 
       suite('fiar-reducer', function() {
 
         test('Starting a game with 3 columns 3 rows should have 9 cells.', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 3})
           assert.equal(store.getState().cells.length, 9)
         })
 
         test('Blue team should place first in correct column and row.', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 3})
           assert.equal(store.getState().cells.length, 9)
           store.dispatch({type: 'drop', columnNumber: 2})
@@ -41,7 +41,7 @@
         })
 
         test('Red team should drop on top of blue team', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 3})
           assert.equal(store.getState().cells.length, 9)
           store.dispatch({type: 'drop', columnNumber: 2})
@@ -51,7 +51,7 @@
         })
 
         test('Blue team should win across', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 12})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 0})
@@ -65,7 +65,7 @@
 
 
         test('Blue team should win vertical', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 12})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 1})
@@ -78,7 +78,7 @@
         })
 
         test('Red team should win across', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 4})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 0})
@@ -94,7 +94,7 @@
         })
 
         test('Blue team should wins diamond left to right', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 8})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 1})
@@ -111,7 +111,7 @@
         })
 
         test('Blue team should wins diamond right to left', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 8})
           store.dispatch({type: 'drop', columnNumber: 3})
           store.dispatch({type: 'drop', columnNumber: 2})
@@ -132,14 +132,14 @@
       suite('ai', function() {
 
         test('should pick a move', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 8})
           store.dispatch({type: 'drop', columnNumber: 3})
           assert.equal(Number.isInteger(ai(store.getState())), true)
         })
 
         test('should calculate the winning move across', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 4})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 0})
@@ -154,7 +154,7 @@
         })
 
         test('should calculate to block the winning move across', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 4})
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 0})
@@ -168,7 +168,7 @@
         })
 
         test('should block a diamond right to left win', function() {
-          const store = Redux.createStore(reducer)
+          const store = createStore(reducer)
           store.dispatch({type: 'start', size: 8})
           store.dispatch({type: 'drop', columnNumber: 3})
           store.dispatch({type: 'drop', columnNumber: 2})

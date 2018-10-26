@@ -4,6 +4,7 @@ import './fiar-cell'
 import { ai } from './ai'
 import {Button} from "@material/mwc-button"
 import {Switch} from '@material/mwc-switch'
+import { createStore } from "redux/es/redux.mjs";
 
 /**
  * @customElement
@@ -29,7 +30,7 @@ class FiarApp extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback()
-    this.store = Redux.createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+    this.store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
     this.store.subscribe(() => this.render())
     this.store.dispatch({type: 'start', size: 7})
   }
