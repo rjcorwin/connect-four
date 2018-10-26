@@ -4,27 +4,28 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>go-polymer-app test</title>
+    <title>fiar-app test</title>
 
     <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../../node_modules/wct-browser-legacy/browser.js"></script>
     <script src="../../src/redux-3.7.2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.min.js"></script>
 
-    <script type="module" src="../../src/go-polymer-app/go-polymer-app.js"></script>
+    <script type="module" src="../../src/fiar-app.js"></script>
   </head>
   <body>
 
     <test-fixture id="BasicTestFixture">
       <template>
-        <go-polymer-app></go-polymer-app>
+        <fiar-app></fiar-app>
       </template>
     </test-fixture>
 
     <script type="module">
       import {reducer, BLUE_TEAM, RED_TEAM} from '../../src/reducer'
-      import { jerry } from '../../src/jerry'
+      import { ai } from '../../src/ai'
 
-      suite('go-polymer-reducer', function() {
+      suite('fiar-reducer', function() {
 
         test('Starting a game with 3 columns 3 rows should have 9 cells.', function() {
           const store = Redux.createStore(reducer)
@@ -129,13 +130,13 @@
 
       });
 
-      suite('jerry', function() {
+      suite('ai', function() {
 
         test('should pick a move', function() {
           const store = Redux.createStore(reducer)
           store.dispatch({type: 'start', size: 8})
           store.dispatch({type: 'drop', columnNumber: 3})
-          assert.equal(Number.isInteger(jerry(store.getState())), true)
+          assert.equal(Number.isInteger(ai(store.getState())), true)
         })
 
         test('should calculate the winning move across', function() {
@@ -150,7 +151,7 @@
           store.dispatch({type: 'drop', columnNumber: 2})
           store.dispatch({type: 'drop', columnNumber: 3})
           store.dispatch({type: 'drop', columnNumber: 2})
-          assert.equal(jerry(store.getState()), 3)
+          assert.equal(ai(store.getState()), 3)
         })
 
         test('should calculate to block the winning move across', function() {
@@ -164,7 +165,7 @@
           store.dispatch({type: 'drop', columnNumber: 2})
           store.dispatch({type: 'drop', columnNumber: 2})
           store.dispatch({type: 'drop', columnNumber: 3})
-          assert.equal(jerry(store.getState()), 3)
+          assert.equal(ai(store.getState()), 3)
         })
 
         test('should block a diamond right to left win', function() {
@@ -180,12 +181,12 @@
           store.dispatch({type: 'drop', columnNumber: 0})
           store.dispatch({type: 'drop', columnNumber: 0})
           // The correct move to block is columnNumber 0.
-          assert.equal(jerry(store.getState()), 0)
+          assert.equal(ai(store.getState()), 0)
         })
 
       })
 
-      suite('go-polymer-app', function() {
+      suite('fiar-app', function() {
 
         test('instantiating the element starts with 7 columns and 7 rows', function() {
           var element = fixture('BasicTestFixture');
@@ -195,39 +196,39 @@
 
         test('clicking a column fills it a cell', function() {
           var element = fixture('BasicTestFixture');
-          element.shadowRoot.querySelector('go-cell').click()
+          element.shadowRoot.querySelector('fiar-cell').click()
           assert.equal(element.store.getState().cells.find(cell => cell.fill === 'BLUE_TEAM').column, 0)
         });
 
         test('Blue team wins', function() {
           var element = fixture('BasicTestFixture');
-          element.shadowRoot.querySelector('go-cell[column="0"]').click()
-          element.shadowRoot.querySelector('go-cell[column="0"]').click()
-          element.shadowRoot.querySelector('go-cell[column="1"]').click()
-          element.shadowRoot.querySelector('go-cell[column="1"]').click()
-          element.shadowRoot.querySelector('go-cell[column="2"]').click()
-          element.shadowRoot.querySelector('go-cell[column="2"]').click()
-          element.shadowRoot.querySelector('go-cell[column="3"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="0"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="0"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="1"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="1"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="2"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="2"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="3"]').click()
           assert.equal(element.store.getState().winner, 'BLUE_TEAM')
         });
 
         test('should reset', function() {
           var element = fixture('BasicTestFixture');
-          element.shadowRoot.querySelector('go-cell[column="0"]').click()
-          element.shadowRoot.querySelector('go-cell[column="0"]').click()
-          element.shadowRoot.querySelector('go-cell[column="1"]').click()
-          element.shadowRoot.querySelector('go-cell[column="1"]').click()
-          element.shadowRoot.querySelector('go-cell[column="2"]').click()
-          element.shadowRoot.querySelector('go-cell[column="2"]').click()
-          element.shadowRoot.querySelector('go-cell[column="3"]').click()
-          element.shadowRoot.querySelector('go-reset').click()
+          element.shadowRoot.querySelector('fiar-cell[column="0"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="0"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="1"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="1"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="2"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="2"]').click()
+          element.shadowRoot.querySelector('fiar-cell[column="3"]').click()
+          element.shadowRoot.querySelector('#reset').click()
           assert.equal(element.store.getState().winner, null)
         });
 
         test('AI enables and takes turn', function() {
           var element = fixture('BasicTestFixture');
-          element.shadowRoot.querySelector('go-cell[column="0"]').click()
-          element.shadowRoot.querySelector('play-jerry').click()
+          element.shadowRoot.querySelector('fiar-cell[column="0"]').click()
+          element.shadowRoot.querySelector('#ai-switch').click()
           assert.equal(element.store.getState().turn, BLUE_TEAM)
         })
 

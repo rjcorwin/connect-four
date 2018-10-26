@@ -4,24 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>go-polymer</title>
-    <meta name="description" content="go-polymer description">
+    <title>Four In A Row</title>
+    <meta name="description" content="fiar description">
 
     <!-- See https://goo.gl/OOhYW5 -->
     <link rel="manifest" href="manifest.json">
 
-    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="src/redux-3.7.2.js"></script>
+    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.1/redux.min.js"></script>
 
-    <script type="module" src="src/go-polymer-app/go-polymer-app.js" crossorigin></script>
+
+    <script type="module" src="src/fiar-app.js" crossorigin></script>
     <style>
-    go-polymer-app {
-    }
-    margin: auto;
-    width: 50%;
     </style>
   </head>
   <body style="">
-    <go-polymer-app opponent-delay=1000 has-opponent></go-polymer-app>
+    <fiar-app ai-delay=1000 ai-enabled></fiar-app>
   </body>
 </html>

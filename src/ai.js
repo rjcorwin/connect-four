@@ -15,7 +15,7 @@ function shuffleArray(array) {
   return array
 }
 
-function jerry(state) {
+function ai(state) {
   // Find a win for me.
   let winningMoves = findWinningMoves(state)
   if (winningMoves.length > 0) {
@@ -64,4 +64,4 @@ function opponentWillHaveWinningMove() {
   return false
 }
 
-export { jerry }
+export { ai }

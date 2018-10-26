@@ -1,11 +1,11 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
-import { reducer, cellsToGrid, RED_TEAM, BLUE_TEAM } from '../reducer'
+import { reducer, cellsToGrid, RED_TEAM, BLUE_TEAM } from './reducer'
 
 /**
  * @customElement
  * @polymer
  */
-class GoCell extends PolymerElement {
+class FiarCell extends PolymerElement {
   static get template() {
     return html`
       <style>
@@ -57,9 +57,9 @@ class GoCell extends PolymerElement {
 
   connectedCallback() {
     super.connectedCallback()
-    this.addEventListener('click', () => this.dispatchEvent(new CustomEvent('go-cell-click', {bubbles: true})))
+    this.addEventListener('click', () => this.dispatchEvent(new CustomEvent('fiar-cell-click', {bubbles: true})))
   }
 
 }
 
-window.customElements.define('go-cell', GoCell);
+window.customElements.define('fiar-cell', FiarCell);

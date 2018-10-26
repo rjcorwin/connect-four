@@ -1,5 +1,6 @@
 {
   "npm": true,
+  "builds": [{ "preset": "es5-bundled" }],
   "lint": {
     "rules": [
       "polymer-3"
