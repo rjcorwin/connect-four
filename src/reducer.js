@@ -12,7 +12,7 @@ let cell = {
 const reducer = (state, action) => {
   let newState = Object.assign({}, state)
   switch (action.type) {
-    case 'start' :
+    case 'START' :
       newState = { cells: [], turn: BLUE_TEAM, winner: null }
       for (let column = 0; column < action.size; column++) {
         for (let row = 0; row < action.size; row++) {
@@ -21,7 +21,7 @@ const reducer = (state, action) => {
       }
       return newState
       break;
-    case 'drop' :
+    case 'DROP' :
       const emptyCell = state.cells.find(cell => !cell.fill && cell.column == action.columnNumber)
       const rowNumber = !emptyCell ? null : emptyCell.row
       newState = Object.assign({}, state, {

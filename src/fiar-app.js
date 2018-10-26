@@ -32,7 +32,7 @@ class FiarApp extends PolymerElement {
     super.connectedCallback()
     this.store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
     this.store.subscribe(() => this.render())
-    this.store.dispatch({type: 'start', size: 7})
+    this.store.dispatch({type: 'START', size: 7})
   }
 
   render() {
@@ -100,11 +100,11 @@ class FiarApp extends PolymerElement {
 
     this.shadowRoot.querySelector('#game').addEventListener('fiar-cell-click', (event) => {
       if (!this.store.getState().winner) {
-        this.store.dispatch({type: 'drop', columnNumber: event.target.column})
+        this.store.dispatch({type: 'DROP', columnNumber: event.target.column})
       }
     }, {once: true})
     this.shadowRoot.querySelector('#reset').addEventListener('click', (event) => {
-      this.store.dispatch({type: 'start', size: 7})
+      this.store.dispatch({type: 'START', size: 7})
     }, {once: true})
     // Listen for turning ai on and off.
     this.shadowRoot.querySelector('#ai-switch').addEventListener('click', (event) => {
@@ -114,9 +114,9 @@ class FiarApp extends PolymerElement {
     // Queue ai if we must.
     if (this.aiEnabled && state.turn === RED_TEAM && !state.winner) {
       if (this.aiDelay > 0) {
-        setTimeout(() => this.store.dispatch({type: 'drop', columnNumber: ai(state)}), this.aiDelay)
+        setTimeout(() => this.store.dispatch({type: 'DROP', columnNumber: ai(state)}), this.aiDelay)
       } else {
-        this.store.dispatch({type: 'drop', columnNumber: ai(state)})
+        this.store.dispatch({type: 'DROP', columnNumber: ai(state)})
       }
     }
   }

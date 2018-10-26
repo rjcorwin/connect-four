@@ -24,7 +24,7 @@ function ai(state) {
     let safeMoves = []
     for(let potentialMove of potentialMoves) {
       let futureStore = createStore(reducer, state)
-      futureStore.dispatch({type: 'drop', columnNumber: potentialMove})
+      futureStore.dispatch({type: 'DROP', columnNumber: potentialMove})
       if (findWinningMoves(futureStore.getState()).length === 0) {
         safeMoves.push(potentialMove)
       }
@@ -45,7 +45,7 @@ function findWinningMoves(state) {
   const winningMoves = []
   for (let i = 0; matrix[0].length > i; i++) {
     let store = createStore(reducer, state)
-    store.dispatch({type: 'drop', columnNumber: i})
+    store.dispatch({type: 'DROP', columnNumber: i})
     if (store.getState().winner) winningMoves.push(i)
   }
   return winningMoves
