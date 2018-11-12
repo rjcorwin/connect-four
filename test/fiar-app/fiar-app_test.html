@@ -4,24 +4,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>fiar-app test</title>
+    <title>fiar-game test</title>
 
     <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../../node_modules/wct-browser-legacy/browser.js"></script>
 
-    <script type="module" src="../../src/fiar-app.js"></script>
+    <script type="module" src="../../src/fiar-game.js"></script>
   </head>
   <body>
 
     <test-fixture id="BasicTestFixture">
       <template>
-        <fiar-app></fiar-app>
+        <fiar-game></fiar-game>
       </template>
     </test-fixture>
 
     <test-fixture id="AiTestFixture">
       <template>
-        <fiar-app ai-enabled></fiar-app>
+        <fiar-game ai-enabled></fiar-game>
       </template>
     </test-fixture>
 
@@ -210,7 +210,7 @@
 
       })
 
-      suite('fiar-app', function() {
+      suite('fiar-game', function() {
 
         test('instantiating the element STARTs with 7 columns and 7 rows', function() {
           var element = fixture('BasicTestFixture');
