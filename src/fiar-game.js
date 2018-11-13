@@ -44,6 +44,11 @@ class FiarGame extends PolymerElement {
     };
   }
 
+  constructor() {
+    super()
+    this._previousState = {}
+  }
+
   connectedCallback() {
     super.connectedCallback()
     if (!this.p2pEnabled) {
@@ -90,30 +95,35 @@ class FiarGame extends PolymerElement {
           margin: 15px;
         }
       </style>
-      ${(state.turn && !state.winner) ? `
-        <div id="turn" style="color: ${state.turn === BLUE_TEAM ? `blue` : `red` };">
-          Go ${state.turn === BLUE_TEAM ? `Blue Team` : `Red Team` }
+      <paper-card>
+        <div class="card-content">
+          ${(state.turn && !state.winner) ? `
+            <div id="turn" style="color: ${state.turn === BLUE_TEAM ? `blue` : `red` };">
+              Go ${state.turn === BLUE_TEAM ? `Blue Team` : `Red Team` }
+            </div>
+          ` : ``}
+          ${state.winner ? `
+            <div id="winner" style="font-weight: bolder; color: ${state.winner === BLUE_TEAM ? `blue` : `red` };">
+              ${state.winner === BLUE_TEAM ? `Blue Team` : `Red Team` } wins!
+            </div>
+          ` : ``}
+          <table id="game">
+           ${grid.map((row, rowNumber) => `
+             <tr>
+               ${row.map((fill, columnNumber) => `
+                 <td>
+                   <fiar-cell column=${columnNumber} row=${rowNumber} fill="${fill}"></fiar-cell>
+                 </td>
+              `).join('')}
+             </tr>
+           `).join('')}
+          </table>
         </div>
-      ` : ``}
-      ${state.winner ? `
-        <div id="winner" style="font-weight: bolder; color: ${state.winner === BLUE_TEAM ? `blue` : `red` };">
-          ${state.winner === BLUE_TEAM ? `Blue Team` : `Red Team` } wins!
+        <div class="card-actions">
+          <mwc-button id="reset" label="reset" icon="refresh"></mwc-button>
+          <mwc-button id="exit" label="exit" icon="logout"></mwc-button>
         </div>
-      ` : ``}
-      <table id="game">
-       ${grid.map((row, rowNumber) => `
-         <tr>
-           ${row.map((fill, columnNumber) => `
-             <td>
-               <fiar-cell column=${columnNumber} row=${rowNumber} fill="${fill}"></fiar-cell>
-             </td>
-          `).join('')}
-         </tr>
-       `).join('')}
-      </table>
-      <div id="reset">
-        <mwc-button class="light" raised="" label="reset" icon="refresh"></mwc-button>
-      </div>
+      </paper-card>
     `
     this.shadowRoot.querySelector('#game').addEventListener('fiar-cell-click', (event) => {
       if (!this.store.getState().winner && !this.aiTakingTurn) {
@@ -128,6 +138,18 @@ class FiarGame extends PolymerElement {
         this.store.dispatch({type: 'START', size: 7})
       }
     }, {once: true})
+    this.shadowRoot.querySelector('#exit').addEventListener('click', (event) => {
+      this.dispatchEvent(new CustomEvent('exit'))
+    }, {once: true})
+    if (!this._previousState.winner && state.winner) {
+      new Audio('tada.wav').play()
+    }
+    if (this._previousState.cells) {
+      const previousNumberOfTurns = this._previousState.cells.reduce((acc, cell) => cell.fill ? acc+1 : acc, 0)
+      const currentNumberOfTurns = state.cells.reduce((acc, cell) => cell.fill ? acc+1 : acc, 0)
+      if (previousNumberOfTurns < currentNumberOfTurns) new Audio('tick.wav').play()
+    }
+    this._previousState = state
   }
 
   aiTurn() {

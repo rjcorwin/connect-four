@@ -28,7 +28,7 @@ class P2pDatHandshake extends LitElement {
     this.inProgress = false
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback()
     const joinParam = new URL(window.location.href).searchParams.get('join')
     const joinKeys = joinParam ? joinParam.split(',') : []
@@ -39,9 +39,21 @@ class P2pDatHandshake extends LitElement {
       this.peerArchiveUrl = joinKeys[0]
       this.initializeOwnArchive()
     } else if (joinKeys.length == 2) {
+      const archive1 = new DatArchive(joinKeys[0])
+      const archive2 = new DatArchive(joinKeys[1])
+      const archive1Info = await archive1.getInfo()
+      const archive2Info = await archive2.getInfo()
+      if (!archive1Info.isOwner && !archive2Info.isOwner) {
+        return alert('You are not owner of archives in this handshake. This URL must not be for you.')
+      }
       this.inProgress = true
-      this.ownArchiveUrl = joinKeys[0]
-      this.peerArchiveUrl = joinKeys[1]
+      if (archive1Info.isOwner) {
+        this.ownArchiveUrl = joinKeys[0]
+        this.peerArchiveUrl = joinKeys[1]
+      } else {
+        this.ownArchiveUrl = joinKeys[1]
+        this.peerArchiveUrl = joinKeys[0]
+      }
       this.dispatchEvent(new CustomEvent('complete'))
     }
   }
@@ -61,6 +73,10 @@ class P2pDatHandshake extends LitElement {
   startHandShake() {
     this.inProgress = true
     this.initializeOwnArchive()
+  }
+
+  cancel() {
+    this.dispatchEvent(new CustomEvent('exit'))
   }
 
   render() {
@@ -99,13 +115,15 @@ class P2pDatHandshake extends LitElement {
       ${(!this.inProgress) ? html`
         <div class="directions">
           You are about to start a Digital Handshake where you and a friend send URLs back and forth.
-          Ready? <mwc-button @click="${this.startHandShake}">start handshake</mwc-button>
+          Ready? <mwc-button @click="${this.startHandShake}">start</mwc-button>
+          or
+          <mwc-button @click="${this.cancel}">cancel</mwc-button>
         </div>
       ` : ``}
       ${(this.inProgress && this.ownArchiveUrl && !this.peerArchiveUrl) ? html`
         <div class="send-it">
           Share this URL to start the handshake:<br>
-          <input value="${window.location.href}?join=${this.ownArchiveUrl}"></input><br>
+          <input value="${window.location.origin}${window.location.pathname}?join=${this.ownArchiveUrl}"></input><br>
         </div>
       ` : ``}
       ${(this.inProgress && this.ownArchiveUrl && this.peerArchiveUrl) ? html`

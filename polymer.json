@@ -1,6 +1,18 @@
 {
   "npm": true,
-  "builds": [{ "preset": "es5-bundled" }],
+  "builds": [
+    { "preset": "es5-bundled" }, 
+    { 
+      "name": "beakerbrowser",
+      "preset": "es6-unbundled",
+      "addServiceWorker": false
+    }
+  ],
+  "extraDependencies": [
+    "tick.wav",
+    "tada.wav",
+    "node_modules/@webcomponents/webcomponentsjs/**"
+  ],
   "lint": {
     "rules": [
       "polymer-3"

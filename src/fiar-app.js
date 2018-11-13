@@ -54,30 +54,47 @@ class FiarApp extends LitElement {
         .choose {
           margin-bottom: 30px;
         }
+        .left {
+          float: left;
+        }
+        .right {
+          float: right;
+        }
+        h1 fiar-cell {
+          margin: 15px;
+          position: relative;
+          bottom: 20px;
+        }
       </style>
+
+      ${(this.mode === MODE_NONE) ? html`
         <paper-card>
           <div class="card-content">
-            ${(this.mode === MODE_NONE) ? html`
-              <h1>Four in a row!</h1>
-              <div class="choose"></div>
+            <h1>
+              <fiar-cell fill="BLUE_TEAM" class="left"></fiar-cell>
+              Four in a row!
+              <fiar-cell fill="RED_TEAM"  class="right"></fiar-cell>
+            </h1>
+            <div class="choose">
               <mwc-button @click="${this.enableSinglePlayer}">Single Player</mwc-button><br>
               <mwc-button @click="${this.enableTwoPlayerHotSeat}">Two Player (Hot Seat)</mwc-button><br>
               <mwc-button @click="${this.enableTwoPlayerP2P}">Two Player (P2P)</mwc-button><br>
-            ` : ``}
-            ${(this.mode === MODE_SINGLE_PLAYER) ? html`
-              <fiar-game ai-delay=1000 ai-enabled></fiar-game>
-            ` : ``}
-            ${(this.mode === MODE_HOT_SEAT) ? html`
-              <fiar-game></fiar-game>
-            ` : ``}
-            ${(this.mode === MODE_P2P && this.handshakeComplete) ? html`
-                <fiar-game p2p-enabled p2p-team="${this.p2pTeam}" own-archive-url="${this.ownArchiveUrl}" peer-archive-url=${this.peerArchiveUrl}"></fiar-game>
-            ` : ``}
-            ${(this.mode === MODE_P2P && !this.handshakeComplete) ? html`
-                <p2p-dat-handshake @complete="${this._handshakeComplete}"></p2p-dat-handshake>
-            ` : ``}
+            </div>
           </div>
         </paper-card>
+      ` : ``}
+      ${(this.mode === MODE_SINGLE_PLAYER) ? html`
+        <fiar-game @exit="${this.exit}" ai-delay=1000 ai-enabled></fiar-game>
+      ` : ``}
+      ${(this.mode === MODE_HOT_SEAT) ? html`
+        <fiar-game @exit="${this.exit}"></fiar-game>
+      ` : ``}
+      ${(this.mode === MODE_P2P && this.handshakeComplete) ? html`
+        <fiar-game @exit="${this.exit}" p2p-enabled p2p-team="${this.p2pTeam}" own-archive-url="${this.ownArchiveUrl}" peer-archive-url=${this.peerArchiveUrl}"></fiar-game>
+      ` : ``}
+      ${(this.mode === MODE_P2P && !this.handshakeComplete) ? html`
+        <p2p-dat-handshake @exit="${this.exit}" @complete="${this._handshakeComplete}"></p2p-dat-handshake>
+      ` : ``}
     `
 
   }
@@ -92,6 +109,14 @@ class FiarApp extends LitElement {
 
   enableTwoPlayerP2P() {
     this.mode = MODE_P2P
+  }
+
+  exit() {
+    this.mode = MODE_NONE
+    // Remove join params so they don't end up getting used again when enabling P2P mode.
+    if (window.location.search !== '') {
+      window.location.search = ''
+    }
   }
 
   _handshakeComplete(event) {
