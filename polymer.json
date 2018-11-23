@@ -5,12 +5,16 @@
     { 
       "name": "beakerbrowser",
       "preset": "es6-unbundled",
-      "addServiceWorker": false
+      "addServiceWorker": false,
+      "bundle": {
+        "sourcemaps": true
+      }
     }
   ],
   "extraDependencies": [
     "tick.wav",
     "tada.wav",
+    "dat-archive.js",
     "node_modules/@webcomponents/webcomponentsjs/**"
   ],
   "lint": {
