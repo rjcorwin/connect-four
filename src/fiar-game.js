@@ -13,7 +13,7 @@ import { createStore as createReduxDatStore } from "redux-dat/redux-dat.js"
  */
 class FiarGame extends PolymerElement {
   static get template() {
-    return html`...`;
+    return html`Loading...`;
   }
   static get properties() {
     return {
@@ -58,7 +58,10 @@ class FiarGame extends PolymerElement {
     } else {
       this.store = createReduxDatStore(reducer, {}, `dat://${this.ownArchiveUrl}`, [`dat://${this.peerArchiveUrl}`])
       this.store.subscribe(() => this.render())
-      this.store.dispatch({type: 'START', size: 7})
+      // @TODO: Temporary fix for "DatArchive.watch may not be ready by the time you DatArchive.write #77" https://github.com/bunsenbrowser/bunsen/issues/77
+      setTimeout(() => {
+        this.store.dispatch({type: 'START', size: 7})
+      }, 3000)
     }
   }
 
