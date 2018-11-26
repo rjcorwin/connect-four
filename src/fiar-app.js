@@ -90,7 +90,7 @@ class FiarApp extends LitElement {
         <fiar-game @exit="${this.exit}"></fiar-game>
       ` : ``}
       ${(this.mode === MODE_P2P && this.handshakeComplete) ? html`
-        <fiar-game @exit="${this.exit}" p2p-enabled p2p-team="${this.p2pTeam}" own-archive-url="${this.ownArchiveUrl}" peer-archive-url=${this.peerArchiveUrl}"></fiar-game>
+        <fiar-game @exit="${this.exit}" p2p-enabled p2p-team="${this.p2pTeam}" own-archive-url="${this.ownArchiveUrl}" peer-archive-url="${this.peerArchiveUrl}"></fiar-game>
       ` : ``}
       ${(this.mode === MODE_P2P && !this.handshakeComplete) ? html`
         <p2p-dat-handshake @exit="${this.exit}" @complete="${this._handshakeComplete}"></p2p-dat-handshake>
