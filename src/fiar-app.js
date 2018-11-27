@@ -42,7 +42,7 @@ class FiarApp extends LitElement {
     fetch('config.json')
       .then(response => response.json())
       .then(config => Object.assign(this, { baseUrl: config.baseUrl }))
-      .catch(e => e)
+      .catch(e => Object.assign(this, {baseUrl: window.location.origin}))
   }
 
   render() {
@@ -97,7 +97,7 @@ class FiarApp extends LitElement {
       ${(this.mode === MODE_P2P && this.handshakeComplete) ? html`
         <fiar-game @exit="${this.exit}" p2p-enabled p2p-team="${this.p2pTeam}" own-archive-url="${this.ownArchiveUrl}" peer-archive-url="${this.peerArchiveUrl}"></fiar-game>
       ` : ``}
-      ${(this.mode === MODE_P2P && !this.handshakeComplete) ? html`
+      ${(this.mode === MODE_P2P && !this.handshakeComplete && this.baseUrl !== undefined && this.baseUrl !== '') ? html`
         <p2p-dat-handshake @exit="${this.exit}" @complete="${this._handshakeComplete}" base-url="${this.baseUrl}"></p2p-dat-handshake>
       ` : ``}
     `

@@ -33,6 +33,7 @@ class P2pDatHandshake extends LitElement {
     super.connectedCallback()
     const joinParam = new URL(window.location.href).searchParams.get('join')
     const joinKeys = joinParam ? joinParam.split(',') : []
+    // @TODO Why do I have to do this? I thought LitElement would have taken care of it.
     this.baseUrl = this.hasAttribute('base-url') ? this.getAttribute('base-url') : window.location.origin
     if (joinKeys.length == 0) {
       this.inProgress = false
