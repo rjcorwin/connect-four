@@ -82,6 +82,11 @@ class P2pDatHandshake extends LitElement {
     this.dispatchEvent(new CustomEvent('exit'))
   }
 
+  copyToClipboard() {
+    this.shadowRoot.querySelector('textarea').select()
+    document.execCommand('copy');
+  }
+
   render() {
     return html`
       <style>
@@ -117,8 +122,9 @@ class P2pDatHandshake extends LitElement {
       `:``}
       ${(!this.inProgress) ? html`
         <div class="directions">
-          You are about to start a Digital Handshake where you and a friend send URLs back and forth.
-          Ready? <mwc-button @click="${this.startHandShake}">start</mwc-button>
+          You are about to start a Digital Handshake where you and a friend send URLs back and forth.<br>
+          Ready? <br>
+          <mwc-button @click="${this.startHandShake}">start</mwc-button>
           or
           <mwc-button @click="${this.cancel}">cancel</mwc-button>
         </div>
@@ -126,13 +132,15 @@ class P2pDatHandshake extends LitElement {
       ${(this.inProgress && this.ownArchiveUrl && !this.peerArchiveUrl) ? html`
         <div class="send-it">
           Share this URL to start the handshake:<br>
-          <input value="${this.baseUrl}${window.location.pathname}?join=${this.ownArchiveUrl}"></input><br>
+          <textarea rows=5>${this.baseUrl}${window.location.pathname}?join=${this.ownArchiveUrl}</textarea><br>
+          <mwc-button @click="${this.copyToClipboard}">copy to clipboard</mwc-button>
         </div>
       ` : ``}
       ${(this.inProgress && this.ownArchiveUrl && this.peerArchiveUrl) ? html`
         <div class="send-it">
           You've created a handshake URL! Share it back.<br>
-          <input value="${this.baseUrl}${window.location.pathname}?join=${this.peerArchiveUrl},${this.ownArchiveUrl}"></input>
+          <textarea rows=5>${this.baseUrl}${window.location.pathname}?join=${this.peerArchiveUrl},${this.ownArchiveUrl}</textarea>
+          <mwc-button @click="${this.copyToClipboard}">copy to clipboard</mwc-button>
           <br><br>
           <!-- TODO: When connected, peer adds greeting and we detect that to proceed. -->
           <mwc-button><a href="${this.baseUrl}${window.location.pathname}?join=${this.peerArchiveUrl},${this.ownArchiveUrl}">Click to continue</a>
