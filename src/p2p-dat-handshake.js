@@ -114,15 +114,16 @@ class P2pDatHandshake extends LitElement {
         }
       </style>
 
-      <div class="shake-icon">🤝</div>
       ${(this.askingForPermission) ? html`
+        <div class="shake-icon">👋</div>
         <div class="allow">
           ^ click allow to generate handshake URL
         </div>
       `:``}
       ${(!this.inProgress) ? html`
+        <div class="shake-icon">👋</div>
         <div class="directions">
-          You are about to start a Digital Handshake where you and a friend send URLs back and forth.<br>
+          You are about to generate a handshake URL with a friend.<br>
           Ready? <br>
           <mwc-button @click="${this.startHandShake}">start</mwc-button>
           or
@@ -130,6 +131,7 @@ class P2pDatHandshake extends LitElement {
         </div>
       ` : ``}
       ${(this.inProgress && this.ownArchiveUrl && !this.peerArchiveUrl) ? html`
+        <div class="shake-icon">👋</div>
         <div class="send-it">
           Share this URL to start the handshake:<br>
           <textarea rows=5>${this.baseUrl}${window.location.pathname}?join=${this.ownArchiveUrl}</textarea><br>
@@ -137,13 +139,13 @@ class P2pDatHandshake extends LitElement {
         </div>
       ` : ``}
       ${(this.inProgress && this.ownArchiveUrl && this.peerArchiveUrl) ? html`
+        <div class="shake-icon">🤝</div>
         <div class="send-it">
-          You've created a handshake URL! Share it back.<br>
+          You've created a handshake URL! Share it back and then open it.<br>
           <textarea rows=5>${this.baseUrl}${window.location.pathname}?join=${this.peerArchiveUrl},${this.ownArchiveUrl}</textarea>
           <mwc-button @click="${this.copyToClipboard}">copy to clipboard</mwc-button>
-          <br><br>
+          <br>
           <!-- TODO: When connected, peer adds greeting and we detect that to proceed. -->
-          <mwc-button><a href="${this.baseUrl}${window.location.pathname}?join=${this.peerArchiveUrl},${this.ownArchiveUrl}">Click to continue</a>
         </div>
       ` : ``}
     `
