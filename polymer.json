@@ -15,6 +15,7 @@
     "tick.wav",
     "tada.wav",
     "dat-archive.js",
+    "config.json",
     "node_modules/@webcomponents/webcomponentsjs/**"
   ],
   "lint": {

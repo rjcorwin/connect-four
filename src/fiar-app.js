@@ -23,6 +23,7 @@ class FiarApp extends LitElement {
 
   static get properties() {
     return {
+      baseUrl: { type: String },
       mode: { type: String },
       handshakeComplete: { type: Boolean },
       p2pTeam: { type: String },
@@ -38,6 +39,10 @@ class FiarApp extends LitElement {
     if (new URL(window.location.href).searchParams.get('join')) {
       this.mode = MODE_P2P
     }
+    fetch('config.json')
+      .then(response => response.json())
+      .then(config => Object.assign(this, { baseUrl: config.baseUrl }))
+      .catch(e => e)
   }
 
   render() {
@@ -93,7 +98,7 @@ class FiarApp extends LitElement {
         <fiar-game @exit="${this.exit}" p2p-enabled p2p-team="${this.p2pTeam}" own-archive-url="${this.ownArchiveUrl}" peer-archive-url="${this.peerArchiveUrl}"></fiar-game>
       ` : ``}
       ${(this.mode === MODE_P2P && !this.handshakeComplete) ? html`
-        <p2p-dat-handshake @exit="${this.exit}" @complete="${this._handshakeComplete}"></p2p-dat-handshake>
+        <p2p-dat-handshake @exit="${this.exit}" @complete="${this._handshakeComplete}" base-url="${this.baseUrl}"></p2p-dat-handshake>
       ` : ``}
     `
 

@@ -15,6 +15,7 @@ class P2pDatHandshake extends LitElement {
 
   static get properties() {
     return {
+      baseUrl: { type: String },
       ownArchiveUrl: { type: String },
       inProgress: { type: String },
       askingForPermission: { type: String },
@@ -32,6 +33,7 @@ class P2pDatHandshake extends LitElement {
     super.connectedCallback()
     const joinParam = new URL(window.location.href).searchParams.get('join')
     const joinKeys = joinParam ? joinParam.split(',') : []
+    this.baseUrl = this.hasAttribute('base-url') ? this.getAttribute('base-url') : window.location.origin
     if (joinKeys.length == 0) {
       this.inProgress = false
     } else if (joinKeys.length == 1) {
@@ -123,16 +125,16 @@ class P2pDatHandshake extends LitElement {
       ${(this.inProgress && this.ownArchiveUrl && !this.peerArchiveUrl) ? html`
         <div class="send-it">
           Share this URL to start the handshake:<br>
-          <input value="${window.location.origin}${window.location.pathname}?join=${this.ownArchiveUrl}"></input><br>
+          <input value="${this.baseUrl}${window.location.pathname}?join=${this.ownArchiveUrl}"></input><br>
         </div>
       ` : ``}
       ${(this.inProgress && this.ownArchiveUrl && this.peerArchiveUrl) ? html`
         <div class="send-it">
           You've created a handshake URL! Share it back.<br>
-          <input value="${window.location.origin}${window.location.pathname}?join=${this.peerArchiveUrl},${this.ownArchiveUrl}"></input>
+          <input value="${this.baseUrl}${window.location.pathname}?join=${this.peerArchiveUrl},${this.ownArchiveUrl}"></input>
           <br><br>
           <!-- TODO: When connected, peer adds greeting and we detect that to proceed. -->
-          <mwc-button><a href="${window.location.origin}${window.location.pathname}?join=${this.peerArchiveUrl},${this.ownArchiveUrl}">Click to continue</a>
+          <mwc-button><a href="${this.baseUrl}${window.location.pathname}?join=${this.peerArchiveUrl},${this.ownArchiveUrl}">Click to continue</a>
         </div>
       ` : ``}
     `
