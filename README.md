@@ -10,3 +10,6 @@ Four-in-a-row (AKA connect four) built with Redux, Web Components, and TDD thank
 - test: `npm run test` or `npm start` and go to `http://localhost:8081/test/fiar-app/fiar-app_test.html`
 - build: `npm run build`, find it in `build/es5-bunlded/`. 
 
+## credits
+- Code by rjsteinert
+- Audio by lebaston100 (https://freesound.org/s/192272/) and jimhancock (https://freesound.org/s/376318/)
