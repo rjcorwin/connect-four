@@ -1,8 +1,10 @@
-# Four In A Row Game
+# Connect Four
 
-https://rjsteinert.github.io/four-in-a-row-game/
+https://connect-four.hashbase.io/
 
-Four-in-a-row (AKA connect four) built with Redux, Web Components, and TDD thanks to a polymer-cli generated project.
+With Beaker Browser you can play two player P2P over Dat protocol at [dat://connect-four.hashbase.io/](dat://connect-four.hashbase.io/).
+
+Connect Four built with Redux, Web Components, and TDD thanks to a polymer-cli generated project.
 
 - install: `npm install && mv node_modules/redux/es/redux.mjs node_modules/redux/es/redux.js`
   - The extra command is needed because of https://github.com/Polymer/tools/issues/736
