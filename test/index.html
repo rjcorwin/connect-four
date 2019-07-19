@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>fiar-game test</title>
+
+    <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../node_modules/wct-browser-legacy/browser.js"></script>
+
+    <script type="module" src="../../src/fiar-game.js"></script>
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <fiar-game></fiar-game>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="AiTestFixture">
+      <template>
+        <fiar-game ai-enabled></fiar-game>
+      </template>
+    </test-fixture>
+
+    <script type="module">
+      import {reducer, BLUE_TEAM, RED_TEAM} from '../src/reducer'
+      import { ai } from '../src/ai'
+      import { createStore } from "redux/es/redux.js";
+
+      suite('fiar-reducer', function() {
+
+        test('Should move to point given angle of 0', function() {
+          const store = createStore(reducer)
+          store.dispatch({
+            type: 'ADD_OBJECT',  
+            object: {
+              id: 1,
+              v: 10,
+              a: 0,
+              x: 50,
+              y: 50,
+              l: 10,
+              w: 10
+            }
+          })
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 60)
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 70)
+        })
+
+        test('Should move to point given angle of 90', function() {
+          const store = createStore(reducer)
+          store.dispatch({
+            type: 'ADD_OBJECT',  
+            object: {
+              id: 1,
+              v: 10,
+              a: 90,
+              x: 50,
+              y: 50,
+              l: 10,
+              w: 10
+            }
+          })
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 60)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 70)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
+        })
+
+        test('Should move to point given angle of 180', function() {
+          const store = createStore(reducer)
+          store.dispatch({
+            type: 'ADD_OBJECT',  
+            object: {
+              id: 1,
+              v: 10,
+              a: 180,
+              x: 50,
+              y: 50,
+              l: 10,
+              w: 10
+            }
+          })
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 40)
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 30)
+        })
+
+        test('Should move to point given angle of 270', function() {
+          const store = createStore(reducer)
+          store.dispatch({
+            type: 'ADD_OBJECT',  
+            object: {
+              id: 1,
+              v: 10,
+              a: 270,
+              x: 50,
+              y: 50,
+              l: 10,
+              w: 10
+            }
+          })
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 40)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 30)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
+        })
+        
+      })
+
+    </script>
+
+
+  </body>
+</html>

@@ -1,41 +1,84 @@
 import { findValidDrops, findWinner, RED_TEAM, BLUE_TEAM } from './helpers'
 
-let cell = {
- column: 0,
- row: 0,
- fill: null,
- highlighted: false
+let defaultState = {
+  xBound: 1000,
+  yBound: 1000,
+  vMin: 10,
+  objects: []
 }
 
-const reducer = (state, action) => {
+const reducer = (state = defaultState, action) => {
   let newState = Object.assign({}, state)
   switch (action.type) {
-    case 'START' :
-      newState = { cells: [], turn: BLUE_TEAM, winner: null }
-      for (let column = 0; column < action.size; column++) {
-        for (let row = 0; row < action.size; row++) {
-          newState.cells.push(Object.assign({}, cell, {column, row}))
-        }
+    case 'ADD_OBJECT': 
+      return {
+        ...state, 
+        objects: [...state.objects, {
+          // id of object
+          id: action.object.id,
+          // velocity
+          v: action.object.v,
+          // angle
+          a: action.object.a,
+          // x position
+          x: action.object.x,
+          // y positino
+          y: action.object.y,
+          // length
+          l: action.object.l,
+          // width
+          w: action.object.w,
+        }]
       }
-      return Object.assign({}, newState, {
-        validDrops: findValidDrops(newState.cells)
+    case 'TICK':
+      const projectedObjects = state.objects.map(object => {
+        return {
+          ...object,
+          x: projectX(object),
+          y: projectY(object)
+        }
       })
-      break;
-    case 'DROP' :
-      const emptyCell = state.cells.find(cell => !cell.fill && cell.column == action.columnNumber)
-      const rowNumber = !emptyCell ? null : emptyCell.row
-      newState = Object.assign({}, state, {
-        turn: state.turn === BLUE_TEAM ? RED_TEAM : BLUE_TEAM,
-        cells: state.cells
-          .map(cell => Object.assign({}, cell, { fill: (cell.row === rowNumber && cell.column === action.columnNumber) ? state.turn : cell.fill }))
-      })
-      return Object.assign({}, newState, {
-        winner: findWinner(newState.cells),
-        validDrops: findValidDrops(newState.cells) 
-      })
-      break;
+      return {
+        ...state,
+        objects: adjustForCollisions(state.objects, projectedObjects)
+      }
     default:
       return state
+  }
+}
+
+function adjustForCollisions(currentObjects, projectedObjects) {
+  // @TODO Look for collisions and react. 
+  return projectedObjects 
+}
+
+function projectX(object) {
+  switch (object.a) {
+    case 0:
+      return object.x
+    case 90:
+      return object.x + object.v
+    case 180:
+      return object.x
+    case 270:
+      return object.x - object.v
+    default:
+      return object.x
+  }
+} 
+
+function projectY(object) {
+  switch (object.a) {
+    case 0:
+      return object.y + object.v
+    case 90:
+      return object.y
+    case 180:
+      return object.y - object.v
+    case 270:
+      return object.y
+    default:
+      return object.y
   }
 }
 
