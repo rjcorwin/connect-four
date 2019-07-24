@@ -2,7 +2,7 @@
 let defaultState = {
   xBound: 1000,
   yBound: 1000,
-  vMin: 10,
+  tailExpiration: 5,
   objects: []
 }
 
@@ -15,8 +15,6 @@ const reducer = (state = defaultState, action) => {
         objects: [...state.objects, {
           // id of object
           id: action.object.id,
-          // velocity
-          v: action.object.v,
           // angle
           a: action.object.a,
           // x position
@@ -29,38 +27,98 @@ const reducer = (state = defaultState, action) => {
           w: action.object.w,
         }]
       }
-    case 'TICK':
-      const projectedObjects = state.objects.map(object => {
-        return {
-          ...object,
-          x: projectX(object),
-          y: projectY(object)
-        }
-      })
+    case 'TURN_OBJECT_UP':
       return {
         ...state,
-        objects: adjustForCollisions(state.objects, projectedObjects)
+        objects: state.objects.map(object => {
+            return object.id === action.objectId 
+              ? { ...object, a: 0 }
+              : object
+          })
+      }
+    case 'TURN_OBJECT_DOWN':
+      return {
+        ...state,
+        objects: state.objects.map(object => {
+            return object.id === action.objectId 
+              ? { ...object, a: 180 }
+              : object
+          })
+      }
+    case 'TURN_OBJECT_LEFT':
+      return {
+        ...state,
+        objects: state.objects.map(object => {
+            return object.id === action.objectId 
+              ? { ...object, a: 270 }
+              : object
+          })
+      }
+    case 'TURN_OBJECT_RIGHT':
+      return {
+        ...state,
+        objects: state.objects.map(object => {
+            return object.id === action.objectId 
+              ? { ...object, a: 90 }
+              : object
+          })
+      }
+    case 'TICK':
+      return {
+        ...state,
+        objects: buildTails(state.objects, adjustForCollisions(state.objects, projectObjects(state.objects)))
       }
     default:
       return state
   }
 }
 
+
+function buildTails(currentObjects, projectedObjects) {
+  return projectedObjects
+}
+
 function adjustForCollisions(currentObjects, projectedObjects) {
-  // @TODO Look for collisions and react. 
-  return projectedObjects 
+  const objectsWithCollision = projectedObjects.reduce((objectsWithCollision, possibleCollisionObject) => {
+    return projectedObjects.find(object => object.id !== possibleCollisionObject.id && object.x === possibleCollisionObject.x && object.y === possibleCollisionObject.y)
+      ? [...objectsWithCollision, possibleCollisionObject]
+      : objectsWithCollision
+  }, [])
+  return projectedObjects.map(projectedObject => {
+    return objectsWithCollision.find(objectWithCollision => objectWithCollision.id === projectedObject.id)
+      ? {
+          ...currentObjects.find(currentObject => currentObject.id === projectedObject.id),
+          a: undefined,
+          collision: true
+        }
+      : projectedObject
+  })
+}
+
+function projectObjects(currentObjects) {
+  return currentObjects.map(projectObject)
+}
+
+function projectObject(object) {
+  return {
+    ...object,
+    x: projectX(object),
+    y: projectY(object)
+  }
 }
 
 function projectX(object) {
   switch (object.a) {
+    case undefined:
+      return object.x
     case 0:
       return object.x
     case 90:
-      return object.x + object.v
+      return object.x + 1
     case 180:
       return object.x
     case 270:
-      return object.x - object.v
+      return object.x - 1
     default:
       return object.x
   }
@@ -68,12 +126,14 @@ function projectX(object) {
 
 function projectY(object) {
   switch (object.a) {
+    case undefined:
+      return object.y
     case 0:
-      return object.y + object.v
+      return object.y + 1
     case 90:
       return object.y
     case 180:
-      return object.y - object.v
+      return object.y - 1
     case 270:
       return object.y
     default:

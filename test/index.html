@@ -36,20 +36,19 @@
             type: 'ADD_OBJECT',  
             object: {
               id: 1,
-              v: 10,
               a: 0,
               x: 50,
               y: 50,
-              l: 10,
-              w: 10
+              expires: 0,
+              ticks: 0
             }
           })
           store.dispatch({type: 'TICK'})
           assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
-          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 60)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 51)
           store.dispatch({type: 'TICK'})
           assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
-          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 70)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 52)
         })
 
         test('Should move to point given angle of 90', function() {
@@ -58,19 +57,18 @@
             type: 'ADD_OBJECT',  
             object: {
               id: 1,
-              v: 10,
               a: 90,
               x: 50,
               y: 50,
-              l: 10,
-              w: 10
+              expires: 0,
+              ticks: 0
             }
           })
           store.dispatch({type: 'TICK'})
-          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 60)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 51)
           assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
           store.dispatch({type: 'TICK'})
-          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 70)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 52)
           assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
         })
 
@@ -80,20 +78,19 @@
             type: 'ADD_OBJECT',  
             object: {
               id: 1,
-              v: 10,
               a: 180,
               x: 50,
               y: 50,
-              l: 10,
-              w: 10
+              expires: 0,
+              ticks: 0
             }
           })
           store.dispatch({type: 'TICK'})
           assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
-          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 40)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 49)
           store.dispatch({type: 'TICK'})
           assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
-          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 30)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 48)
         })
 
         test('Should move to point given angle of 270', function() {
@@ -102,22 +99,112 @@
             type: 'ADD_OBJECT',  
             object: {
               id: 1,
-              v: 10,
               a: 270,
               x: 50,
               y: 50,
-              l: 10,
-              w: 10
+              expires: 0,
+              ticks: 0
             }
           })
           store.dispatch({type: 'TICK'})
-          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 40)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 49)
           assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
           store.dispatch({type: 'TICK'})
-          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 30)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 48)
           assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
         })
         
+        test('should change object\'s angle', function() {
+          const store = createStore(reducer)
+          store.dispatch({
+            type: 'ADD_OBJECT',  
+            object: {
+              id: 1,
+              a: 180,
+              x: 50,
+              y: 50,
+              expires: 0,
+              ticks: 0
+            }
+          })
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 49)
+          store.dispatch({type: 'TURN_OBJECT_UP', objectId: 1})
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
+        })
+
+        test('should initialize with boundary wall')
+
+        test('two objects with velocity should collide', () => {
+          const store = createStore(reducer)
+          store.dispatch({
+            type: 'ADD_OBJECT',  
+            object: {
+              id: 1,
+              a: 90,
+              x: 50,
+              y: 50,
+              expires: 0,
+              ticks: 0
+            }
+          })
+          store.dispatch({
+            type: 'ADD_OBJECT',  
+            object: {
+              id: 2,
+              a: 270,
+              x: 52,
+              y: 50,
+              expires: 0,
+              ticks: 0
+            }
+          })
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).collision, true)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).a, undefined)
+        })
+
+        test('object with velocity should get stuck next to object without velocity', () => {
+          const store = createStore(reducer)
+          store.dispatch({
+            type: 'ADD_OBJECT',  
+            object: {
+              id: 1,
+              v: 10,
+              a: 0,
+              x: 50,
+              y: 50,
+              expires: 0,
+              ticks: 0
+            }
+          })
+          store.dispatch({
+            type: 'ADD_OBJECT',  
+            object: {
+              id: 2,
+              v: 0,
+              a: undefined,
+              x: 50,
+              y: 52,
+              expires: 0,
+              ticks: 0
+            }
+          })
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 51)
+          store.dispatch({type: 'TICK'})
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).x, 50)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 51)
+          assert.equal(store.getState().objects.find(obj => obj.id === 1).a, undefined)
+
+        }) 
+
       })
 
     </script>
