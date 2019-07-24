@@ -1,4 +1,3 @@
-import { findValidDrops, findWinner, RED_TEAM, BLUE_TEAM } from './helpers'
 
 let defaultState = {
   xBound: 1000,
@@ -82,4 +81,4 @@ function projectY(object) {
   }
 }
 
-export { reducer, BLUE_TEAM, RED_TEAM }
+export { reducer }

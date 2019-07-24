@@ -9,7 +9,6 @@
     <script src="../../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../../node_modules/wct-browser-legacy/browser.js"></script>
 
-    <script type="module" src="../../src/fiar-game.js"></script>
   </head>
   <body>
 
@@ -26,8 +25,7 @@
     </test-fixture>
 
     <script type="module">
-      import {reducer, BLUE_TEAM, RED_TEAM} from '../src/reducer'
-      import { ai } from '../src/ai'
+      import {reducer} from '../src/reducer.js'
       import { createStore } from "redux/es/redux.js";
 
       suite('fiar-reducer', function() {
