@@ -9,6 +9,14 @@ let defaultState = {
 const reducer = (state = defaultState, action) => {
   let newState = Object.assign({}, state)
   switch (action.type) {
+    case 'NEW_GAME': 
+      return {
+        ...state, 
+        objects: [...state.objects, ...generateWallObjects(action.settings.xBound, action.settings.yBound)],
+        xBound: action.settings.xBound,
+        yBound: action.settings.yBound,
+        tailExpiration: action.settings.tailExpiration
+      }
     case 'ADD_OBJECT': 
       return {
         ...state, 
@@ -20,11 +28,7 @@ const reducer = (state = defaultState, action) => {
           // x position
           x: action.object.x,
           // y positino
-          y: action.object.y,
-          // length
-          l: action.object.l,
-          // width
-          w: action.object.w,
+          y: action.object.y
         }]
       }
     case 'TURN_OBJECT_UP':
@@ -93,6 +97,55 @@ function adjustForCollisions(currentObjects, projectedObjects) {
         }
       : projectedObject
   })
+}
+
+function generateWallObjects(xBound, yBound) {
+  // Generate south wall.
+  let x = 0
+  let y = 0
+  let objects = []
+  debugger
+  // South wall.
+  while (y < yBound) {
+    objects.push({
+        id: `wall-${x}-${y}`,
+        a: undefined,
+        x: x,
+        y: y
+    })
+    y++
+  }
+  // East wall.
+  while (x < xBound) {
+    objects.push({
+        id: `wall-${x}-${y}`,
+        a: undefined,
+        x: x,
+        y: y
+    })
+    x++
+  }
+  // North wall.
+  while (y > yBound) {
+    objects.push({
+        id: `wall-${x}-${y}`,
+        a: undefined,
+        x: x,
+        y: y
+    })
+    y--
+  }
+  // West wall.
+  while (x > xBound) {
+    objects.push({
+        id: `wall-${x}-${y}`,
+        a: undefined,
+        x: x,
+        y: y
+    })
+    x--
+  }
+  return objects
 }
 
 function projectObjects(currentObjects) {

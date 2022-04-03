@@ -8,6 +8,29 @@ import {Switch} from '@material/mwc-switch'
 import { createStore } from "redux/es/redux.js";
 import '@polymer/paper-card/paper-card.js';
 
+/*
+document.onkeydown = checkKey;
+
+function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38') {
+        // up arrow
+    }
+    else if (e.keyCode == '40') {
+        // down arrow
+    }
+    else if (e.keyCode == '37') {
+       // left arrow
+    }
+    else if (e.keyCode == '39') {
+       // right arrow
+    }
+
+}
+*/
+
 const MODE_NONE = 'MODE_NONE'
 const MODE_SINGLE_PLAYER = 'MODE_SINGLE_PLAYER'
 const MODE_HOT_SEAT = 'MODE_HOT_SEAT'

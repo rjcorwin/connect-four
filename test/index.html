@@ -136,7 +136,28 @@
           assert.equal(store.getState().objects.find(obj => obj.id === 1).y, 50)
         })
 
-        test('should initialize with boundary wall')
+        test('should initialize with boundary wall', () => {
+          const store = createStore(reducer)
+          store.dispatch({type: 'NEW_GAME', settings: {
+            xBound: 30,
+            yBound: 30,
+            tailExpiration: 5
+          }})
+          debugger
+          // Check for objects in corners.
+          assert.equal(store.getState().objects.find(obj => obj.x === 0 && obj.y === 0).a, undefined)
+          assert.equal(store.getState().objects.find(obj => obj.x === 30 && obj.y === 0).a, undefined)
+          assert.equal(store.getState().objects.find(obj => obj.x === 0 && obj.y === 30).a, undefined)
+          assert.equal(store.getState().objects.find(obj => obj.x === 30 && obj.y === 30).a, undefined)
+          // Check for a couple other random parts of the wall.
+          assert.equal(store.getState().objects.find(obj => obj.x === 10 && obj.y === 30).a, undefined)
+          assert.equal(store.getState().objects.find(obj => obj.x === 30 && obj.y === 10).a, undefined)
+          assert.equal(store.getState().objects.find(obj => obj.x === 0 && obj.y === 10).a, undefined)
+          assert.equal(store.getState().objects.find(obj => obj.x === 10 && obj.y === 0).a, undefined)
+          // Total wall blocks.
+          assert.equal(store.getState().objects.length, 106)
+
+        })
 
         test('two objects with velocity should collide', () => {
           const store = createStore(reducer)
